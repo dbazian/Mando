@@ -3,17 +3,20 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Mando from "./assets/Mando.jpg";
 import Mudhorn from "./assets/Mudhorn.jpg";
+import ProgressBar from "./components/ProgressBar";
 
 const App = () => {
   const [mandoHealth, setMandoHealth] = useState(25);
   const [mudhornHealth, setMudhornHealth] = useState(50);
+  const [playerHealthBar, setPlayerHealthBar] = useState(80);
+  const [enemyHealthBar, setEnemyHealthBar] = useState(100);
 
   const attackHandler = () => {
-    setMudhornHealth(mudhornHealth - 10);
+    setEnemyHealthBar(enemyHealthBar - 10);
   };
 
   const defendHandler = () => {
-    setMandoHealth(mandoHealth + 10);
+    playerHealthBar < 90 ? setPlayerHealthBar(playerHealthBar + 10) : setPlayerHealthBar(100);
   };
 
   const flamethrowerHandler = () => {
@@ -31,7 +34,8 @@ const App = () => {
           <p>
             Health: <span>{mandoHealth}</span>
           </p>
-          <img src={Mando} />
+          <img src={Mando} alt="The Mandalorian" />
+          <ProgressBar percentage={playerHealthBar} />
         </div>
         <div className="center-container">
           <h1>VS</h1>
@@ -41,7 +45,8 @@ const App = () => {
           <p>
             Health: <span>{mudhornHealth}</span>
           </p>
-          <img className="mudhorn" src={Mudhorn} />
+          <img className="mudhorn" src={Mudhorn} alt="The Mudhorn" />
+          <ProgressBar percentage={enemyHealthBar} />
         </div>
       </div>
       <div className="buttons">

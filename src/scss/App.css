@@ -98,4 +98,23 @@ h1 {
   margin: 0;
   font-size: 2vh;
 }
+
+.outer-div {
+  position: relative;
+  width: 50%;
+  height: 20px;
+  margin: 15px auto;
+  background: white;
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 5px #000;
+          box-shadow: inset 0 0 5px #000;
+}
+
+.outer-div .inner-div {
+  height: 100%;
+  background-color: red;
+  border-radius: inherit;
+  -webkit-transition: width 0.2s ease-in;
+  transition: width 0.2s ease-in;
+}
 /*# sourceMappingURL=App.css.map */
