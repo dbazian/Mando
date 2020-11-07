@@ -1,0 +1,66 @@
+.app {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+  height: 100vh;
+  background-color: black;
+
+  .containers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    .container {
+      width: 75vw;
+      padding: 0;
+      margin: 5px;
+      border-color: white;
+      border-width: 1vw;
+      border-style: solid;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+
+      p {
+        color: white;
+        text-align: center;
+      }
+
+      img {
+        width: 60vw;
+      }
+    }
+  }
+
+  .center-container {
+    background-color: white;
+    width: 100vw;
+    margin: 10px;
+
+    h1 {
+      color: black;
+    }
+  }
+}
+
+.buttons {
+  background-color: white;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  Button {
+    margin: 5px;
+    font-size: 12px;
+  }
+}
+
+h1 {
+  color: white;
+  text-align: center;
+  margin: 0;
+  font-size: 2vh;
+}
