@@ -8,6 +8,20 @@ import ProgressBar from "./components/ProgressBar";
 const App = () => {
   const [playerHealthBar, setPlayerHealthBar] = useState(100);
   const [enemyHealthBar, setEnemyHealthBar] = useState(100);
+  const [flameThrowerCount, setFlameThrowerCount] = useState(0);
+  const [flameThrowerDisabled, setFlameThrowerDisabled] = useState(false);
+  const [grappleCount, setGrappleCount] = useState(0);
+  const [grappleDisabled, setGrappleDisabled] = useState(false);
+
+  const reset = () => {
+    setPlayerHealthBar(100);
+    setEnemyHealthBar(100);
+    setFlameThrowerDisabled(false);
+    setGrappleDisabled(false);
+  };
+  const ENEMY_ATTACK = () => {
+    setPlayerHealthBar(playerHealthBar - Math.floor(Math.random() * 11));
+  };
 
   useEffect(() => {
     if (playerHealthBar <= 0 && enemyHealthBar > 0) {
@@ -22,28 +36,61 @@ const App = () => {
     }
   }, [playerHealthBar, enemyHealthBar]);
 
-  const reset = () => {
-    setPlayerHealthBar(100);
-    setEnemyHealthBar(100);
-  };
+  useEffect(() => {
+    if (flameThrowerCount === 0) {
+      setFlameThrowerDisabled(false);
+    }
+  }, [flameThrowerCount]);
+
+  useEffect(() => {
+    if (grappleCount === 0) {
+      setGrappleDisabled(false);
+    }
+  }, [grappleCount]);
 
   const attackHandler = () => {
     setEnemyHealthBar(enemyHealthBar - Math.floor(Math.random() * 11));
-    setPlayerHealthBar(playerHealthBar - Math.floor(Math.random() * 11));
+    ENEMY_ATTACK();
+    flameThrowerCounter();
+    grappleCounter();
   };
 
   const defendHandler = () => {
     playerHealthBar <= 90
-      ? setPlayerHealthBar(playerHealthBar + 6 - Math.floor(Math.random() * 11))
-      : setPlayerHealthBar(100 - Math.floor(Math.random() * 5));
+      ? setPlayerHealthBar(playerHealthBar + 3 - Math.floor(Math.random() * 11))
+      : setPlayerHealthBar(100 - Math.floor(Math.random() * 11));
+    flameThrowerCounter();
+    grappleCounter();
   };
 
-  const flamethrowerHandler = () => {
-    setEnemyHealthBar(enemyHealthBar - Math.floor(Math.random() * 21));
-    setPlayerHealthBar(playerHealthBar - Math.floor(Math.random() * 11));
+  const flameThrowerHandler = () => {
+    setEnemyHealthBar(enemyHealthBar - Math.floor(Math.random() * 15));
+    ENEMY_ATTACK();
+    setFlameThrowerDisabled(true);
+    grappleCounter();
   };
 
-  const grappleHandler = () => {};
+  const flameThrowerCounter = () => {
+    if (flameThrowerCount === 4) {
+      setFlameThrowerCount(0);
+    } else {
+      setFlameThrowerCount(flameThrowerCount + 1);
+    }
+  };
+
+  const grappleHandler = () => {
+    setEnemyHealthBar(enemyHealthBar - Math.floor(Math.random() * 5));
+    setGrappleDisabled(true);
+    flameThrowerCounter();
+  };
+
+  const grappleCounter = () => {
+    if (grappleCount === 3) {
+      setGrappleCount(0);
+    } else {
+      setGrappleCount(grappleCount + 1);
+    }
+  };
 
   return (
     <div className="app">
@@ -63,16 +110,16 @@ const App = () => {
         </div>
       </div>
       <div className="buttons">
-        <Button onClick={attackHandler} variant="dark">
+        <Button onClick={attackHandler} variant="primary">
           Attack
         </Button>
-        <Button onClick={defendHandler} variant="dark">
+        <Button onClick={defendHandler} variant="primary">
           Defend
         </Button>
-        <Button onClick={flamethrowerHandler} variant="dark">
+        <Button onClick={flameThrowerHandler} variant="primary" disabled={flameThrowerDisabled}>
           Flame Thrower
         </Button>
-        <Button onClick={grappleHandler} variant="dark">
+        <Button onClick={grappleHandler} variant="primary" disabled={grappleDisabled}>
           Grapple
         </Button>
       </div>
