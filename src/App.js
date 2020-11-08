@@ -13,6 +13,8 @@ import BabyYoda from "./assets/BabyYoda.jpg";
 const App = () => {
   const [playerHealthBar, setPlayerHealthBar] = useState(100);
   const [enemyHealthBar, setEnemyHealthBar] = useState(100);
+  const [defendDisabled, setDefendDisabled] = useState(false);
+  const [defendCount, setDefendCount] = useState(0);
   const [flameThrowerCount, setFlameThrowerCount] = useState(0);
   const [flameThrowerDisabled, setFlameThrowerDisabled] = useState(false);
   const [grappleCount, setGrappleCount] = useState(0);
@@ -31,10 +33,14 @@ const App = () => {
     setBabyYodaDisabled(false);
     setGrappleCount(0);
     setFlameThrowerCount(0);
+    setPlayerActionNumber();
+    setPlayerAction();
+    setEnemyActionNumber();
+    setDefendCount(0);
   };
 
   const ENEMY_ATTACK = () => {
-    let attack = Math.floor(Math.random() * 25);
+    let attack = 5 + Math.floor(Math.random() * 25);
     setPlayerHealthBar(playerHealthBar - attack);
     setEnemyActionNumber("attacks for " + attack + " damage");
   };
@@ -50,19 +56,10 @@ const App = () => {
     if (playerHealthBar <= 0 || enemyHealthBar <= 0) {
       reset();
     }
+    if (playerHealthBar > 100) {
+      setPlayerHealthBar(100);
+    }
   }, [playerHealthBar, enemyHealthBar]);
-
-  useEffect(() => {
-    if (flameThrowerCount === 0) {
-      setFlameThrowerDisabled(false);
-    }
-  }, [flameThrowerCount]);
-
-  useEffect(() => {
-    if (grappleCount === 0) {
-      setGrappleDisabled(false);
-    }
-  }, [grappleCount]);
 
   const attackHandler = () => {
     setMandoImage(Attack);
@@ -73,28 +70,36 @@ const App = () => {
     ENEMY_ATTACK();
     flameThrowerCounter();
     grappleCounter();
+    defendCounter();
   };
 
   const defendHandler = () => {
     setMandoImage(Defend);
     setPlayerAction("heals ");
-    let heal = Math.floor(Math.random() * 11);
-    if (playerHealthBar <= 90) {
-      setPlayerHealthBar(playerHealthBar + heal);
-      setPlayerActionNumber("for " + heal + " health");
-      ENEMY_ATTACK();
-    } else {
-      setPlayerHealthBar(100);
-      setPlayerActionNumber("to full health");
-      ENEMY_ATTACK();
-    }
+    let heal = Math.floor(Math.random() * 10);
+    setPlayerHealthBar(playerHealthBar + heal);
+    setPlayerActionNumber("for " + heal + " health");
+    setDefendDisabled(true);
+    setDefendCount(defendCount + 1);
     flameThrowerCounter();
     grappleCounter();
+    setEnemyActionNumber();
+  };
+
+  const defendCounter = () => {
+    if (defendCount === 4) {
+      setDefendCount(0);
+      setDefendDisabled(false);
+    } else if (defendCount > 0) {
+      setDefendCount(defendCount + 1);
+    } else {
+      return;
+    }
   };
 
   const flameThrowerHandler = () => {
     setMandoImage(FlameThrower);
-    setPlayerAction("uses flamethrower for");
+    setPlayerAction("uses flamethrower for ");
     let attack = Math.floor(Math.random() * 15);
     setPlayerActionNumber(attack + " damage");
     setEnemyHealthBar(enemyHealthBar - attack);
@@ -102,11 +107,13 @@ const App = () => {
     setFlameThrowerDisabled(true);
     setFlameThrowerCount(flameThrowerCount + 1);
     grappleCounter();
+    defendCounter();
   };
 
   const flameThrowerCounter = () => {
     if (flameThrowerCount === 4) {
       setFlameThrowerCount(0);
+      setFlameThrowerDisabled(false);
     } else if (flameThrowerCount > 0) {
       setFlameThrowerCount(flameThrowerCount + 1);
     } else {
@@ -124,11 +131,13 @@ const App = () => {
     setGrappleDisabled(true);
     setGrappleCount(grappleCount + 1);
     flameThrowerCounter();
+    defendCounter();
   };
 
   const grappleCounter = () => {
     if (grappleCount === 3) {
       setGrappleCount(0);
+      setGrappleDisabled(false);
     } else if (grappleCount > 0) {
       setGrappleCount(grappleCount + 1);
     } else {
@@ -172,7 +181,7 @@ const App = () => {
         <Button onClick={attackHandler} variant="light">
           Attack
         </Button>
-        <Button onClick={defendHandler} variant="light">
+        <Button onClick={defendHandler} variant="light" disabled={defendDisabled}>
           Defend
         </Button>
         <Button onClick={flameThrowerHandler} variant="light" disabled={flameThrowerDisabled}>
