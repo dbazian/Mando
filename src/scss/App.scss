@@ -1,16 +1,21 @@
 .full {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
   flex-direction: column;
   height: 100vh;
   background-color: black;
   color: white;
-  font-size: 3vw;
+  font-size: 2vw;
   text-align: center;
+  padding-bottom: 10vh;
 
   img {
-    width: 40vw;
+    width: 75vw;
+  }
+
+  h1 {
+    font-size: 4vw;
   }
 
   .center-container {
@@ -20,6 +25,7 @@
 
     h1 {
       color: black;
+      font-size: 4vw;
     }
   }
 
@@ -30,7 +36,7 @@
     Button {
       margin-left: 5px;
       margin-right: 5px;
-      font-size: 2vw;
+      font-size: 3vw;
     }
   }
 }

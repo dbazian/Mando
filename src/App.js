@@ -19,6 +19,9 @@ const App = () => {
   const [grappleDisabled, setGrappleDisabled] = useState(false);
   const [babyYodaDisabled, setBabyYodaDisabled] = useState(false);
   const [mandoImage, setMandoImage] = useState(Mando);
+  const [playerAction, setPlayerAction] = useState("");
+  const [playerActionNumber, setPlayerActionNumber] = useState();
+  const [enemyActionNumber, setEnemyActionNumber] = useState();
 
   const reset = () => {
     setPlayerHealthBar(100);
@@ -31,7 +34,9 @@ const App = () => {
   };
 
   const ENEMY_ATTACK = () => {
-    setPlayerHealthBar(playerHealthBar - Math.floor(Math.random() * 25));
+    let attack = Math.floor(Math.random() * 25);
+    setPlayerHealthBar(playerHealthBar - attack);
+    setEnemyActionNumber("attacks for " + attack + " damage");
   };
 
   useEffect(() => {
@@ -61,7 +66,10 @@ const App = () => {
 
   const attackHandler = () => {
     setMandoImage(Attack);
-    setEnemyHealthBar(enemyHealthBar - Math.floor(Math.random() * 11));
+    setPlayerAction("attacks for ");
+    let attack = Math.floor(Math.random() * 11);
+    setPlayerActionNumber(attack + " damage");
+    setEnemyHealthBar(enemyHealthBar - attack);
     ENEMY_ATTACK();
     flameThrowerCounter();
     grappleCounter();
@@ -69,16 +77,27 @@ const App = () => {
 
   const defendHandler = () => {
     setMandoImage(Defend);
-    playerHealthBar <= 90
-      ? setPlayerHealthBar(playerHealthBar + 3 - Math.floor(Math.random() * 11))
-      : setPlayerHealthBar(100 - Math.floor(Math.random() * 11));
+    setPlayerAction("heals ");
+    let heal = Math.floor(Math.random() * 11);
+    if (playerHealthBar <= 90) {
+      setPlayerHealthBar(playerHealthBar + heal);
+      setPlayerActionNumber("for " + heal + " health");
+      ENEMY_ATTACK();
+    } else {
+      setPlayerHealthBar(100);
+      setPlayerActionNumber("to full health");
+      ENEMY_ATTACK();
+    }
     flameThrowerCounter();
     grappleCounter();
   };
 
   const flameThrowerHandler = () => {
     setMandoImage(FlameThrower);
-    setEnemyHealthBar(enemyHealthBar - Math.floor(Math.random() * 15));
+    setPlayerAction("uses flamethrower for");
+    let attack = Math.floor(Math.random() * 15);
+    setPlayerActionNumber(attack + " damage");
+    setEnemyHealthBar(enemyHealthBar - attack);
     ENEMY_ATTACK();
     setFlameThrowerDisabled(true);
     setFlameThrowerCount(flameThrowerCount + 1);
@@ -97,7 +116,11 @@ const App = () => {
 
   const grappleHandler = () => {
     setMandoImage(Grapple);
-    setEnemyHealthBar(enemyHealthBar - Math.floor(Math.random() * 5));
+    setPlayerAction("grapples for ");
+    let attack = Math.floor(Math.random() * 5);
+    setEnemyHealthBar(enemyHealthBar - attack);
+    setPlayerActionNumber(attack + " damage");
+    setEnemyActionNumber("Is grappled and can't attack");
     setGrappleDisabled(true);
     setGrappleCount(grappleCount + 1);
     flameThrowerCounter();
@@ -115,6 +138,9 @@ const App = () => {
 
   const babyYodaHandler = () => {
     setMandoImage(BabyYoda);
+    setPlayerAction("is saved by the child");
+    setPlayerActionNumber();
+    setEnemyActionNumber("can't attack");
     setPlayerHealthBar(100);
     setBabyYodaDisabled(true);
   };
@@ -136,6 +162,12 @@ const App = () => {
           <ProgressBar percentage={enemyHealthBar} />
         </div>
       </div>
+      <div>
+        <h1>
+          Mando {playerAction} {playerActionNumber}
+        </h1>
+        <h1>Mudhorn {enemyActionNumber}</h1>
+      </div>
       <div className="buttons">
         <Button onClick={attackHandler} variant="light">
           Attack
@@ -144,13 +176,13 @@ const App = () => {
           Defend
         </Button>
         <Button onClick={flameThrowerHandler} variant="light" disabled={flameThrowerDisabled}>
-          Flame Thrower
+          Flames
         </Button>
         <Button onClick={grappleHandler} variant="light" disabled={grappleDisabled}>
           Grapple
         </Button>
         <Button onClick={babyYodaHandler} variant="light" disabled={babyYodaDisabled}>
-          Baby Yoda
+          Child
         </Button>
       </div>
     </div>
