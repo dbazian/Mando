@@ -1,4 +1,4 @@
-.app {
+.full {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -14,68 +14,26 @@
           flex-direction: column;
   height: 100vh;
   background-color: black;
-}
-
-.app .containers {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-}
-
-.app .containers .container {
-  width: 75vw;
-  padding: 0;
-  margin: 5px;
-  border-color: white;
-  border-width: 1vw;
-  border-style: solid;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-}
-
-.app .containers .container p {
   color: white;
+  font-size: 3vw;
   text-align: center;
 }
 
-.app .containers .container img {
-  width: 60vw;
+.full img {
+  width: 40vw;
 }
 
-.app .center-container {
+.full .center-container {
   background-color: white;
-  width: 100vw;
-  margin: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-.app .center-container h1 {
+.full .center-container h1 {
   color: black;
 }
 
-.buttons {
-  background-color: white;
-  width: 100vw;
+.full .buttons {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -87,34 +45,9 @@
           align-items: center;
 }
 
-.buttons Button {
-  margin: 5px;
-  font-size: 12px;
-}
-
-h1 {
-  color: white;
-  text-align: center;
-  margin: 0;
-  font-size: 2vh;
-}
-
-.outer-div {
-  position: relative;
-  width: 50%;
-  height: 20px;
-  margin: 15px auto;
-  background: white;
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 5px #000;
-          box-shadow: inset 0 0 5px #000;
-}
-
-.outer-div .inner-div {
-  height: 100%;
-  background-color: red;
-  border-radius: inherit;
-  -webkit-transition: width 0.2s ease-in;
-  transition: width 0.2s ease-in;
+.full .buttons Button {
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 2vw;
 }
 /*# sourceMappingURL=App.css.map */

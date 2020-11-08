@@ -1,9 +1,14 @@
 import "./scss/App.css";
 import React, { useState, useEffect } from "react";
+import ProgressBar from "./components/ProgressBar/ProgressBar";
 import Button from "react-bootstrap/Button";
 import Mando from "./assets/Mando.jpg";
 import Mudhorn from "./assets/Mudhorn.jpg";
-import ProgressBar from "./components/ProgressBar";
+import Attack from "./assets/Attack.jpg";
+import Defend from "./assets/Defend.jpg";
+import FlameThrower from "./assets/FlameThrower.jpg";
+import Grapple from "./assets/Grapple.jpg";
+import BabyYoda from "./assets/BabyYoda.jpg";
 
 const App = () => {
   const [playerHealthBar, setPlayerHealthBar] = useState(100);
@@ -12,26 +17,32 @@ const App = () => {
   const [flameThrowerDisabled, setFlameThrowerDisabled] = useState(false);
   const [grappleCount, setGrappleCount] = useState(0);
   const [grappleDisabled, setGrappleDisabled] = useState(false);
+  const [babyYodaDisabled, setBabyYodaDisabled] = useState(false);
+  const [mandoImage, setMandoImage] = useState(Mando);
 
   const reset = () => {
     setPlayerHealthBar(100);
     setEnemyHealthBar(100);
     setFlameThrowerDisabled(false);
     setGrappleDisabled(false);
+    setBabyYodaDisabled(false);
+    setGrappleCount(0);
+    setFlameThrowerCount(0);
   };
+
   const ENEMY_ATTACK = () => {
-    setPlayerHealthBar(playerHealthBar - Math.floor(Math.random() * 11));
+    setPlayerHealthBar(playerHealthBar - Math.floor(Math.random() * 25));
   };
 
   useEffect(() => {
     if (playerHealthBar <= 0 && enemyHealthBar > 0) {
       alert("You Lost");
-      reset();
     } else if (enemyHealthBar <= 0 && playerHealthBar > 0) {
       alert("You Won");
-      reset();
     } else if (playerHealthBar <= 0 && enemyHealthBar <= 0) {
       alert("draw:");
+    }
+    if (playerHealthBar <= 0 || enemyHealthBar <= 0) {
       reset();
     }
   }, [playerHealthBar, enemyHealthBar]);
@@ -49,6 +60,7 @@ const App = () => {
   }, [grappleCount]);
 
   const attackHandler = () => {
+    setMandoImage(Attack);
     setEnemyHealthBar(enemyHealthBar - Math.floor(Math.random() * 11));
     ENEMY_ATTACK();
     flameThrowerCounter();
@@ -56,6 +68,7 @@ const App = () => {
   };
 
   const defendHandler = () => {
+    setMandoImage(Defend);
     playerHealthBar <= 90
       ? setPlayerHealthBar(playerHealthBar + 3 - Math.floor(Math.random() * 11))
       : setPlayerHealthBar(100 - Math.floor(Math.random() * 11));
@@ -64,40 +77,54 @@ const App = () => {
   };
 
   const flameThrowerHandler = () => {
+    setMandoImage(FlameThrower);
     setEnemyHealthBar(enemyHealthBar - Math.floor(Math.random() * 15));
     ENEMY_ATTACK();
     setFlameThrowerDisabled(true);
+    setFlameThrowerCount(flameThrowerCount + 1);
     grappleCounter();
   };
 
   const flameThrowerCounter = () => {
     if (flameThrowerCount === 4) {
       setFlameThrowerCount(0);
-    } else {
+    } else if (flameThrowerCount > 0) {
       setFlameThrowerCount(flameThrowerCount + 1);
+    } else {
+      return;
     }
   };
 
   const grappleHandler = () => {
+    setMandoImage(Grapple);
     setEnemyHealthBar(enemyHealthBar - Math.floor(Math.random() * 5));
     setGrappleDisabled(true);
+    setGrappleCount(grappleCount + 1);
     flameThrowerCounter();
   };
 
   const grappleCounter = () => {
     if (grappleCount === 3) {
       setGrappleCount(0);
-    } else {
+    } else if (grappleCount > 0) {
       setGrappleCount(grappleCount + 1);
+    } else {
+      return;
     }
   };
 
+  const babyYodaHandler = () => {
+    setMandoImage(BabyYoda);
+    setPlayerHealthBar(100);
+    setBabyYodaDisabled(true);
+  };
+
   return (
-    <div className="app">
+    <div className="full">
       <div className="containers">
         <div className="container">
-          <h1>The Mandalorian</h1>
-          <img src={Mando} alt="The Mandalorian" />
+          <h1>Mando</h1>
+          <img src={mandoImage} alt="The Mandalorian" />
           <ProgressBar percentage={playerHealthBar} />
         </div>
         <div className="center-container">
@@ -110,17 +137,20 @@ const App = () => {
         </div>
       </div>
       <div className="buttons">
-        <Button onClick={attackHandler} variant="primary">
+        <Button onClick={attackHandler} variant="light">
           Attack
         </Button>
-        <Button onClick={defendHandler} variant="primary">
+        <Button onClick={defendHandler} variant="light">
           Defend
         </Button>
-        <Button onClick={flameThrowerHandler} variant="primary" disabled={flameThrowerDisabled}>
+        <Button onClick={flameThrowerHandler} variant="light" disabled={flameThrowerDisabled}>
           Flame Thrower
         </Button>
-        <Button onClick={grappleHandler} variant="primary" disabled={grappleDisabled}>
+        <Button onClick={grappleHandler} variant="light" disabled={grappleDisabled}>
           Grapple
+        </Button>
+        <Button onClick={babyYodaHandler} variant="light" disabled={babyYodaDisabled}>
+          Baby Yoda
         </Button>
       </div>
     </div>
