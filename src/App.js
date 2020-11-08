@@ -14,16 +14,15 @@ const App = () => {
   const [playerHealthBar, setPlayerHealthBar] = useState(100);
   const [enemyHealthBar, setEnemyHealthBar] = useState(100);
   const [defendDisabled, setDefendDisabled] = useState(false);
-  const [defendCount, setDefendCount] = useState(0);
-  const [flameThrowerCount, setFlameThrowerCount] = useState(0);
+  const [defendCount, setDefendCount] = useState();
+  const [flameThrowerCount, setFlameThrowerCount] = useState();
   const [flameThrowerDisabled, setFlameThrowerDisabled] = useState(false);
-  const [grappleCount, setGrappleCount] = useState(0);
+  const [grappleCount, setGrappleCount] = useState();
   const [grappleDisabled, setGrappleDisabled] = useState(false);
   const [babyYodaDisabled, setBabyYodaDisabled] = useState(false);
   const [mandoImage, setMandoImage] = useState(Mando);
-  const [playerAction, setPlayerAction] = useState("");
-  const [playerActionNumber, setPlayerActionNumber] = useState();
-  const [enemyActionNumber, setEnemyActionNumber] = useState();
+  const [playerTurn, setPlayerTurn] = useState(":");
+  const [enemyTurn, setEnemyTurn] = useState(":");
 
   const reset = () => {
     setPlayerHealthBar(100);
@@ -33,16 +32,9 @@ const App = () => {
     setBabyYodaDisabled(false);
     setGrappleCount(0);
     setFlameThrowerCount(0);
-    setPlayerActionNumber();
-    setPlayerAction();
-    setEnemyActionNumber();
     setDefendCount(0);
-  };
-
-  const ENEMY_ATTACK = () => {
-    let attack = 5 + Math.floor(Math.random() * 25);
-    setPlayerHealthBar(playerHealthBar - attack);
-    setEnemyActionNumber("attacks for " + attack + " damage");
+    setPlayerTurn(":");
+    setEnemyTurn(":");
   };
 
   useEffect(() => {
@@ -61,95 +53,71 @@ const App = () => {
     }
   }, [playerHealthBar, enemyHealthBar]);
 
+  const PlayerAction = (PImage, PAction, PValue, PDescription) => {
+    setMandoImage(PImage);
+    let pValue = Math.floor(Math.random() * PValue);
+    if (PDescription === " damage") {
+      setEnemyHealthBar(enemyHealthBar - pValue);
+    } else if (PDescription === " health") {
+      setPlayerHealthBar(playerHealthBar + pValue);
+    }
+    if (grappleCount > 0 && grappleCount < 4) {
+      setGrappleCount(grappleCount + 1);
+    } else {
+      setGrappleCount(0);
+      setGrappleDisabled(false);
+    }
+    if (flameThrowerCount > 0 && flameThrowerCount < 4) {
+      setFlameThrowerCount(flameThrowerCount + 1);
+    } else {
+      setFlameThrowerCount(0);
+      setFlameThrowerDisabled(false);
+    }
+    if (defendCount > 0 && defendCount < 4) {
+      setDefendCount(defendCount + 1);
+    } else {
+      setDefendCount(0);
+      setDefendDisabled(false);
+    }
+    setPlayerTurn(PAction + pValue + PDescription);
+  };
+
+  const EnemyAction = (EAction, EAttack, EDescription) => {
+    let eAttack = Math.floor(Math.random() * EAttack);
+    setPlayerHealthBar(playerHealthBar - eAttack);
+    setEnemyTurn(EAction + eAttack + EDescription);
+  };
+
   const attackHandler = () => {
-    setMandoImage(Attack);
-    setPlayerAction("attacks for ");
-    let attack = Math.floor(Math.random() * 11);
-    setPlayerActionNumber(attack + " damage");
-    setEnemyHealthBar(enemyHealthBar - attack);
-    ENEMY_ATTACK();
-    flameThrowerCounter();
-    grappleCounter();
-    defendCounter();
+    PlayerAction(Attack, "attacks for ", 10, " damage");
+    EnemyAction("attacks for ", 25, " damage");
   };
 
   const defendHandler = () => {
-    setMandoImage(Defend);
-    setPlayerAction("heals ");
-    let heal = Math.floor(Math.random() * 10);
-    setPlayerHealthBar(playerHealthBar + heal);
-    setPlayerActionNumber("for " + heal + " health");
+    PlayerAction(Defend, "heals for ", 10, " health");
+    setEnemyTurn(" prepares for next attack");
     setDefendDisabled(true);
-    setDefendCount(defendCount + 1);
-    flameThrowerCounter();
-    grappleCounter();
-    setEnemyActionNumber();
-  };
-
-  const defendCounter = () => {
-    if (defendCount === 4) {
-      setDefendCount(0);
-      setDefendDisabled(false);
-    } else if (defendCount > 0) {
-      setDefendCount(defendCount + 1);
-    } else {
-      return;
-    }
+    setDefendCount(1);
   };
 
   const flameThrowerHandler = () => {
-    setMandoImage(FlameThrower);
-    setPlayerAction("uses flamethrower for ");
-    let attack = Math.floor(Math.random() * 15);
-    setPlayerActionNumber(attack + " damage");
-    setEnemyHealthBar(enemyHealthBar - attack);
-    ENEMY_ATTACK();
+    PlayerAction(FlameThrower, "uses flamethrower for ", 15, " damage");
+    EnemyAction(" attacks for ", 25, " damage");
     setFlameThrowerDisabled(true);
-    setFlameThrowerCount(flameThrowerCount + 1);
-    grappleCounter();
-    defendCounter();
-  };
-
-  const flameThrowerCounter = () => {
-    if (flameThrowerCount === 4) {
-      setFlameThrowerCount(0);
-      setFlameThrowerDisabled(false);
-    } else if (flameThrowerCount > 0) {
-      setFlameThrowerCount(flameThrowerCount + 1);
-    } else {
-      return;
-    }
+    setFlameThrowerCount(1);
   };
 
   const grappleHandler = () => {
-    setMandoImage(Grapple);
-    setPlayerAction("grapples for ");
-    let attack = Math.floor(Math.random() * 5);
-    setEnemyHealthBar(enemyHealthBar - attack);
-    setPlayerActionNumber(attack + " damage");
-    setEnemyActionNumber("Is grappled and can't attack");
+    PlayerAction(Grapple, "grapples for ", 5, " damage");
+    setEnemyTurn(" is grappled and can't attack");
     setGrappleDisabled(true);
-    setGrappleCount(grappleCount + 1);
-    flameThrowerCounter();
-    defendCounter();
-  };
-
-  const grappleCounter = () => {
-    if (grappleCount === 3) {
-      setGrappleCount(0);
-      setGrappleDisabled(false);
-    } else if (grappleCount > 0) {
-      setGrappleCount(grappleCount + 1);
-    } else {
-      return;
-    }
+    setGrappleCount(1);
   };
 
   const babyYodaHandler = () => {
     setMandoImage(BabyYoda);
-    setPlayerAction("is saved by the child");
-    setPlayerActionNumber();
-    setEnemyActionNumber("can't attack");
+    setPlayerTurn(" is saved by the child");
+    setEnemyTurn(" can't attack");
     setPlayerHealthBar(100);
     setBabyYodaDisabled(true);
   };
@@ -172,10 +140,8 @@ const App = () => {
         </div>
       </div>
       <div>
-        <h1>
-          Mando {playerAction} {playerActionNumber}
-        </h1>
-        <h1>Mudhorn {enemyActionNumber}</h1>
+        <h1>Mando {playerTurn}</h1>
+        <h1>Mudhorn {enemyTurn}</h1>
       </div>
       <div className="buttons">
         <Button onClick={attackHandler} variant="light">
