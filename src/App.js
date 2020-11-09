@@ -11,22 +11,23 @@ import Grapple from "./assets/Grapple.jpg";
 import BabyYoda from "./assets/BabyYoda.jpg";
 
 const App = () => {
+  const [mandoImage, setMandoImage] = useState(Mando);
   const [playerHealthBar, setPlayerHealthBar] = useState(100);
   const [enemyHealthBar, setEnemyHealthBar] = useState(100);
   const [defendDisabled, setDefendDisabled] = useState(false);
   const [defendCount, setDefendCount] = useState();
-  const [flameThrowerCount, setFlameThrowerCount] = useState();
   const [flameThrowerDisabled, setFlameThrowerDisabled] = useState(false);
-  const [grappleCount, setGrappleCount] = useState();
+  const [flameThrowerCount, setFlameThrowerCount] = useState();
   const [grappleDisabled, setGrappleDisabled] = useState(false);
+  const [grappleCount, setGrappleCount] = useState();
   const [babyYodaDisabled, setBabyYodaDisabled] = useState(false);
-  const [mandoImage, setMandoImage] = useState(Mando);
   const [playerTurn, setPlayerTurn] = useState(":");
   const [enemyTurn, setEnemyTurn] = useState(":");
 
   const reset = () => {
     setPlayerHealthBar(100);
     setEnemyHealthBar(100);
+    setDefendDisabled(false);
     setFlameThrowerDisabled(false);
     setGrappleDisabled(false);
     setBabyYodaDisabled(false);
@@ -90,7 +91,7 @@ const App = () => {
 
   const attackHandler = () => {
     PlayerAction(Attack, "attacks for ", 10, " damage");
-    EnemyAction("attacks for ", 25, " damage");
+    EnemyAction("attacks for ", 30, " damage");
   };
 
   const defendHandler = () => {
@@ -102,7 +103,7 @@ const App = () => {
 
   const flameThrowerHandler = () => {
     PlayerAction(FlameThrower, "uses flamethrower for ", 15, " damage");
-    EnemyAction(" attacks for ", 25, " damage");
+    EnemyAction(" attacks for ", 30, " damage");
     setFlameThrowerDisabled(true);
     setFlameThrowerCount(1);
   };

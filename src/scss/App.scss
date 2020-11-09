@@ -12,10 +12,19 @@
 
   img {
     width: 75vw;
+    @media screen and (min-width: 700px) {
+      width: 40vw;
+    }
+    @media screen and (min-width: 1100px) {
+      width: 20vw;
+    }
   }
 
   h1 {
     font-size: 4vw;
+    @media screen and (min-width: 1100px) {
+      font-size: 3vw;
+    }
   }
 
   .center-container {
@@ -26,6 +35,9 @@
     h1 {
       color: black;
       font-size: 4vw;
+      @media screen and (min-width: 1100px) {
+        font-size: 3vw;
+      }
     }
   }
 
@@ -37,6 +49,9 @@
       margin-left: 5px;
       margin-right: 5px;
       font-size: 3vw;
+      @media screen and (min-width: 1100px) {
+        font-size: 2vw;
+      }
     }
   }
 }
