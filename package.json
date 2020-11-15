@@ -1,5 +1,6 @@
 {
-  "name": "javagame",
+  "name": "mando-vs-mudhorn",
+  "homepage": "https://darrell.bazian.com/mando",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
